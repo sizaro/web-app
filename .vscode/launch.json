@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach to Chrome",
+            "request": "attach",
+            "type": "chrome",
+            "url": "http://localhost:8080", 
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+        "name": "Launch Chrome against localhost",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:8080", 
+        "webRoot": "${workspaceFolder}"
+        },
+          
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Node Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${file}",
+        }
+    ]
+}

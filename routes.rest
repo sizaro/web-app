@@ -1,0 +1,29 @@
+// LOCALHOST
+###Get all food items
+GET http://localhost:3000/test
+
+###Get one food items
+GET http://localhost:3000/test/6666f234c0dd03e928d21b50
+
+###Put request
+POST http://localhost:3000 HTTP/1.1
+Content-Type: application/json
+
+{
+    "drinks": "avocado juice",
+    "spices": "bitroot",
+    "email": "gethealthy@siza.com"
+  }
+
+###Put request
+PUT http://localhost:3000/test/66729925884ee5298744ebb5 HTTP/1.1
+Content-Type: application/json
+
+{
+    "drinks": "avocados juice",
+    "spices": "bitroots",
+    "email": "gethealthy@bamsiza.com"
+  }
+
+###Delete request
+DELETE http://localhost:3000/test/66729925884ee5298744ebb5
