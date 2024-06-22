@@ -8,7 +8,7 @@ const getInfo = {}
 
 getInfo.getAll = async function (req, res) {
      //#swagger.tags=['Users']
-    const results = await mongoDb.getDb().db().collection('food').find();
+    const results = await mongoDb.getDb().db().collection('contacts').find();
     results.toArray().then((objects) => {
         console.log(objects)
         res.setHeader("Content-Type", "application/json")
@@ -21,7 +21,7 @@ getInfo.getSingle = async function (req, res) {
     const product_id = req.params.id;
     const userId = ObjectId.createFromHexString(product_id);
     console.log(userId)
-    const results = await mongoDb.getDb().db().collection('food').find({ _id: userId });
+    const results = await mongoDb.getDb().db().collection('contacts').find({ _id: userId });
     if (!results) {
         return res.status(404).json({ error: "results not found" });
     }
@@ -36,12 +36,14 @@ getInfo.getSingle = async function (req, res) {
 
 getInfo.createItem = async function (req, res) {
          //#swagger.tags=['Users']
-    const item = {
-        drinks : req.body.drinks,
-        spices : req.body.spices,
-        email : req.body.email
+    const contact = {
+        firstName : req.body.firstName,
+        lastName : req.body.lastName,
+        email: req.body.email,
+        favoriteColor: req.body.favoriteColor,
+        birthday : req.body.birthday
     };
-    const results = await mongoDb.getDb().db().collection('food').insertOne(item);
+    const results = await mongoDb.getDb().db().collection('contacts').insertOne(contact);
    if(results.acknowledged){
     res.status(204).send();
    } else{
@@ -56,12 +58,14 @@ getInfo.updateItem = async function (req, res) {
     const userId = ObjectId.createFromHexString(product_id);
     console.log(userId)
 
-    const item = {
-        drinks : req.body.drinkName,
-        email : req.body.email,
-        spices : req.body.spiceName
+    const contact = {
+        firstName : req.body.firstName,
+        lastName : req.body.lastName,
+        email: req.body.email,
+        favoriteColor: req.body.favoriteColor,
+        birthday : req.body.birthday
     }
-    const results = await mongoDb.getDb().db().collection('food').replaceOne({_id:userId},item);
+    const results = await mongoDb.getDb().db().collection('contacts').replaceOne({_id:userId},contact);
     if(results.modifiedCount > 0){
         res.status(204).send();
        } else{
@@ -74,8 +78,8 @@ getInfo.deleteItem = async function (req, res) {
     const product_id = req.params.id;
     const userId = ObjectId.createFromHexString(product_id);
     console.log(userId)
-    const results = await mongoDb.getDb().db().collection('food').deleteOne({_id:userId});
-    if(results.modifiedCount > 0){
+    const results = await mongoDb.getDb().db().collection('contacts').deleteOne({_id:userId});
+    if(results.deletedCount > 0){
         res.status(204).send();
        } else{
         res.status(500).json(results.error || 'some error occurred while deleting the user')

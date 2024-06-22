@@ -1,29 +1,41 @@
 // LOCALHOST
-###Get all food items
+
+###localhost
+GET http://localhost:3000
+
+
+###published link on render.com
+https://web-app-project1.onrender.com/
+
+###Get all contacts
 GET http://localhost:3000/test
 
-###Get one food items
-GET http://localhost:3000/test/6666f234c0dd03e928d21b50
+###Get one contact
+GET http://localhost:3000/test/6676c2c73fb09bc863eaaee8
 
-###Put request
+###Post request, add an item
 POST http://localhost:3000 HTTP/1.1
 Content-Type: application/json
 
 {
-    "drinks": "avocado juice",
-    "spices": "bitroot",
-    "email": "gethealthy@siza.com"
+   "firstName": "optimus",
+  "lastName": "prime",
+  "email": "optimusprine@test.com",
+  "favoriteColor": "white",
+  "birthday": "12/12/20"
   }
 
-###Put request
-PUT http://localhost:3000/test/66729925884ee5298744ebb5 HTTP/1.1
+###Update an item, put request
+PUT http://localhost:3000/test/6676c6688af61d8a6267c94b HTTP/1.1
 Content-Type: application/json
 
 {
-    "drinks": "avocados juice",
-    "spices": "bitroots",
-    "email": "gethealthy@bamsiza.com"
+  "firstName": "Optimus",
+  "lastName": "Prime",
+  "email": "optimusprime@test.com",
+  "favoriteColor": "Blue",
+  "birthday": "12/12/100"
   }
 
 ###Delete request
-DELETE http://localhost:3000/test/66729925884ee5298744ebb5
+DELETE http://localhost:3000/test/6676c6688af61d8a6267c94b HTTP/1.1
