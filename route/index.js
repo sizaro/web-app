@@ -1,6 +1,5 @@
 const express = require('express')
 const controller = require('../controller/home')
-
 const controllerP1 = require('../controller/project1')
 
 const router = express.Router()
@@ -17,7 +16,7 @@ router.get('/test', controllerP1.getAll)
 router.get('/test/:id', controllerP1.getSingle)
 
 //route to create a new user
-router.post('/', controllerP1.createItem)
+router.post('/',controllerP1.createItem)
 
 //route to update the collection
 router.put('/test/:id', controllerP1.updateItem)
