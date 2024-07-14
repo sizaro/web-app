@@ -11,19 +11,19 @@ router.get('/', controller.buildHome)
 router.use('/', require('./swagger'))
 
 //route to get all test collections
-router.get('/test', controllerP1.getAll)
+router.get('/test', controllerP1.getAllUsers)
 
 //route to get a single user
-router.get('/test/:id', controllerP1.getSingle)
+router.get('/test/:id', controllerP1.getUserById)
 
 //route to create a new user
-router.post('/', controllerP1.createItem)
+router.post('/', controllerP1.createUserFromForm)
 
 //route to update the collection
-router.put('/test/:id', controllerP1.updateItem)
+router.put('/test/:id', controllerP1.updateUser)
 
 //route to delete user
-router.delete('/test/:id', controllerP1.deleteItem)
+router.delete('/test/:id', controllerP1.deleteUser)
 
 
 

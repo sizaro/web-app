@@ -1,89 +1,129 @@
-const express = require('express');
-const mongoDb = require('../database/mongoDB');
+// controllers/userController.js
+const { getDb } = require('../database/mongoDB');
 const { ObjectId } = require('mongodb');
 
-const router = require('../route/test')
-
 const getInfo = {}
+const userCollection = 'users';
 
-getInfo.getAll = async function (req, res) {
-     //#swagger.tags=['Users']
-    const results = await mongoDb.getDb().db().collection('contacts').find();
+const oauthUserCollection = `oauthusers`
+
+getInfo.getAllUsers = async (req, res) => {
+    const results = await getDb().db().collection(userCollection).find();
     results.toArray().then((objects) => {
-        console.log(objects)
         res.setHeader("Content-Type", "application/json")
         res.status(200).json(objects);
-    })
-}
+    });
+};
 
-getInfo.getSingle = async function (req, res) {
-         //#swagger.tags=['Users']
-    const product_id = req.params.id;
-    const userId = ObjectId.createFromHexString(product_id);
-    console.log(userId)
-    const results = await mongoDb.getDb().db().collection('contacts').find({ _id: userId });
+getInfo.getUserById = async (req, res) => {
+    const userId = ObjectId.createFromHexString(req.params.id);
+    const results = await getDb().collection(userCollection).findOne({ _id: userId });
     if (!results) {
-        return res.status(404).json({ error: "results not found" });
+        return res.status(404).json({ error: "User not found" });
     }
-    console.log(results);
-    results.toArray().then((objects) => {
-        console.log(objects)
-        res.setHeader("Content-Type", "application/json")
-        res.status(200).json(objects);
-    }
-    )
-}
+    res.setHeader("Content-Type", "application/json")
+    res.status(200).json(results);
+};
 
-getInfo.createItem = async function (req, res) {
-         //#swagger.tags=['Users']
-    const contact = {
-        firstName : req.body.firstName,
-        lastName : req.body.lastName,
+getInfo.createUserFromForm = async (req, res) => {
+    const user = {
+        username:req.body.username,
         email: req.body.email,
-        favoriteColor: req.body.favoriteColor,
-        birthday : req.body.birthday
+        password:req.body.password
     };
-    const results = await mongoDb.getDb().db().collection('contacts').insertOne(contact);
-   if(results.acknowledged){
-    res.status(204).send();
-   } else{
-    res.status(500).json(response.error || 'some error occurred while updating the user')
-   }
-   
-}
-
-getInfo.updateItem = async function (req, res) {
-         //#swagger.tags=['Users']
-    const product_id = req.params.id;
-    const userId = ObjectId.createFromHexString(product_id);
-    console.log(userId)
-
-    const contact = {
-        firstName : req.body.firstName,
-        lastName : req.body.lastName,
-        email: req.body.email,
-        favoriteColor: req.body.favoriteColor,
-        birthday : req.body.birthday
+    const results = await getDb().db().collection(userCollection).insertOne(user);
+    if(results.acknowledged){
+        res.status(204).send();
+    } else{
+        res.status(500).json(response.error || 'Some error occurred while creating the user');
     }
-    const results = await mongoDb.getDb().db().collection('contacts').replaceOne({_id:userId},contact);
+};
+
+getInfo.updateUser = async (req, res) => {
+    const userId = ObjectId.createFromHexString(req.params.id);
+    const user = {
+        username: req.body.username,
+        email: req.body.email,
+        password:req.body.password
+    };
+    const results = await getDb().collection(userCollection).replaceOne({_id: userId}, user);
     if(results.modifiedCount > 0){
         res.status(204).send();
-       } else{
-        res.status(500).json(response.error || 'some error occurred while updating the user')
-       }
-}
+    } else{
+        res.status(500).json(response.error || 'Some error occurred while updating the user');
+    }
+};
 
-getInfo.deleteItem = async function (req, res) {
-         //#swagger.tags=['Users']
-    const product_id = req.params.id;
-    const userId = ObjectId.createFromHexString(product_id);
-    console.log(userId)
-    const results = await mongoDb.getDb().db().collection('contacts').deleteOne({_id:userId});
+getInfo.deleteUser = async (req, res) => {
+    const userId = ObjectId.createFromHexString(req.params.id);
+    const results = await getDb().collection(userCollection).deleteOne({_id: userId});
     if(results.deletedCount > 0){
         res.status(204).send();
-       } else{
-        res.status(500).json(results.error || 'some error occurred while deleting the user')
-       }
-}
+    } else{
+        res.status(500).json(results.error || 'Some error occurred while deleting the user');
+    }
+};
+
+
+//oauth user collection 
+getInfo.getAllUsersOauth = async (req, res) => {
+    const results = await getDb().collection(oauthUserCollection).find();
+    results.toArray().then((objects) => {
+        res.setHeader("Content-Type", "application/json")
+        res.status(200).json(objects);
+    });
+};
+
+getInfo.getUserByIdOauth = async (req, res) => {
+    const userId = ObjectId.createFromHexString(req.params.id);
+    const results = await getDb().collection(oauthUserCollection).findOne({ _id: userId });
+    if (!results) {
+        return res.status(404).json({ error: "User not found" });
+    }
+    res.setHeader("Content-Type", "application/json")
+    res.status(200).json(results);
+};
+
+getInfo.createUserFromFormOauth = async (req, res) => {
+    const user = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        favoriteColor: req.body.favoriteColor,
+        birthday: req.body.birthday
+    };
+    const results = await getDb().collection(oauthUserCollection).insertOne(user);
+    if(results.acknowledged){
+        res.status(204).send();
+    } else{
+        res.status(500).json(response.error || 'Some error occurred while creating the user');
+    }
+};
+
+getInfo.updateUserOauth = async (req, res) => {
+    const userId = ObjectId.createFromHexString(req.params.id);
+    const user = {
+        username: req.body.username,
+        email: req.body.email,
+        password:req.body.password
+    };
+    const results = await getDb().collection(oauthUserCollection).replaceOne({_id: userId}, user);
+    if(results.modifiedCount > 0){
+        res.status(204).send();
+    } else{
+        res.status(500).json(response.error || 'Some error occurred while updating the user');
+    }
+};
+
+getInfo.deleteUserOauth = async (req, res) => {
+    const userId = ObjectId.createFromHexString(req.params.id);
+    const results = await getDb().collection(oauthUserCollection).deleteOne({_id: userId});
+    if(results.deletedCount > 0){
+        res.status(204).send();
+    } else{
+        res.status(500).json(results.error || 'Some error occurred while deleting the user');
+    }
+};
+
 
 module.exports = getInfo

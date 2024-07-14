@@ -6,7 +6,7 @@ const home = {};
 
 home.buildHome = async function (req, res){
     //#swagger.tags=['we did it']
-    res.send("we did it")
+    res.send('your welcome')
 }
 
 module.exports = home
